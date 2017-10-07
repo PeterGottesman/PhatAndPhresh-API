@@ -21,11 +21,11 @@ namespace PhatAndPhresh
 			string templates = System.IO.File.ReadAllText("./wwwroot/templates.txt");
 			m_templates = templates.Split('\n').ToList();
 			string nouns = System.IO.File.ReadAllText("./wwwroot/nouns.txt");
-			m_nouns = templates.Split('\n').ToList();
+            m_nouns = nouns.Split('\n').ToList();
 			string adjectives = System.IO.File.ReadAllText("./wwwroot/adjectives.txt");
-			m_adjectives = templates.Split('\n').ToList();
+            m_adjectives = adjectives.Split('\n').ToList();
 			string verbs = System.IO.File.ReadAllText("./wwwroot/verbs.txt");
-            m_verbs = templates.Split('\n').ToList();
+            m_verbs = verbs.Split('\n').ToList();
 
 		}
 
@@ -33,6 +33,7 @@ namespace PhatAndPhresh
         {
             Random rand = new Random();
             string verse = m_templates.ElementAt(rand.Next(m_templates.Count));
+			string base_word = m_nouns.ElementAt(rand.Next(m_nouns.Count));
 
 			int tag_count = verse.Count(x => x == '<');
             int start_token = 0;
@@ -61,7 +62,7 @@ namespace PhatAndPhresh
                         break;
                 }
 
-				string rhyme = m_RhymeGenerator.GetRhyme("bitch", pos);
+                string rhyme = m_RhymeGenerator.GetRhyme(base_word, pos);
                 verse = verse.Remove(start_token, end_token + 1).Insert(start_token, rhyme);
                 tag_count--;
 			}

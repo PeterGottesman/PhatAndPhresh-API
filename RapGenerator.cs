@@ -29,7 +29,7 @@ namespace PhatAndPhresh
 
 		}
 
-        public string Generate()
+        public string Generate(int verse_count)
         {
             Random rand = new Random();
             string verse = m_templates.ElementAt(rand.Next(m_templates.Count));

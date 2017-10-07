@@ -34,38 +34,6 @@ namespace PhatAndPhresh
             Random rand = new Random();
             string verse = m_templates.ElementAt(rand.Next(m_templates.Count));
 
-            //int tag_count = verse.Count(x => x == '<');
-            //int start_token = 0;
-            //int end_token = 0;
-
-            //while (tag_count > 0)
-            //{
-            //    start_token = verse.IndexOf('<', start_token);
-            //    end_token = verse.IndexOf('>', start_token);
-            //    end_token -= start_token;
-            //    string token_tag = verse.Substring(start_token + 1, end_token - 1);
-            //    WordType pos;
-            //    switch (token_tag)
-            //    {
-            //        case "noun":
-            //            pos = WordType.Noun;
-            //            break;
-            //        case "adjective":
-            //            pos = WordType.Adjective;
-            //            break;
-            //        case "verb":
-            //            pos = WordType.Verb;
-            //            break;
-            //        default:
-            //            pos = WordType.Any;
-            //            break;
-            //    }
-
-            //    string rhyme = m_RhymeGenerator.GetRhyme(base_word, pos);
-            //    verse = verse.Remove(start_token, end_token + 1).Insert(start_token, rhyme);
-            //    tag_count--;
-            //}
-
             List<string> verse_list = verse.Split(' ').ToList();
             bool base_hit = false;
             string base_word = "";
@@ -76,14 +44,17 @@ namespace PhatAndPhresh
 
                 if (!base_hit && word.ElementAt(0) == '<')
                 {
-                    string base_type = word.Substring(1, word.Count() - 2);
+                    int end_index = word.IndexOf('>');
+                    string base_type = word.Substring(1, end_index - 1);
 					base_word = GetBaseWord(base_type);
                     verse_list[i] = base_word;
                     base_hit = true;
-                }
+					if (word.Contains(',')) { verse_list[i] += ','; }
+				}
                 else if(base_hit && word.ElementAt(0) == '<')
                 {
-                    string base_type = word.Substring(1, word.Count() - 2);
+					int end_index = word.IndexOf('>');
+                    string base_type = word.Substring(1, end_index - 1);
 					WordType pos;
                     switch (base_type)
 					{
@@ -103,8 +74,10 @@ namespace PhatAndPhresh
 					string rhyme = m_RhymeGenerator.GetRhyme(base_word, pos);
                     verse_list[i] = rhyme;
                     base_word = rhyme;
-                }
-                
+					if (word.Contains(',')) { verse_list[i] += ','; }
+				}
+
+
             }
 
             verse = verse_list.Aggregate((a, b) => a + ' ' + b);
@@ -125,6 +98,7 @@ namespace PhatAndPhresh
         /// <param name="base_type">Part of speech.</param>
         private string GetBaseWord(string base_type)
         {
+            
 			Random rand = new Random();
 			string base_word;
 			switch (base_type)
@@ -142,6 +116,7 @@ namespace PhatAndPhresh
                         base_word = "cunt";
 			            break;
 			    }
+
             return base_word;
 		}
     }

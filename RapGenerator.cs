@@ -14,7 +14,7 @@ namespace PhatAndPhresh
 		{
             m_RhymeGenerator = rhymeGenerator;
 
-			string templates = System.IO.File.ReadAllText("templates.txt");
+			string templates = System.IO.File.ReadAllText("./wwwroot/templates.txt");
 			m_templates = templates.Split('\n').ToList();
 		}
 
@@ -27,10 +27,21 @@ namespace PhatAndPhresh
 
             string verse = m_templates.ElementAt(rand.Next(m_templates.Count));
 
-            verse.IndexOf('<');
-            verse.IndexOf('>');
+            int start_token = verse.IndexOf('<');
+            int end_token = verse.IndexOf('>');
+            end_token = end_token - start_token;
+            string token = verse.Substring(start_token + 1, end_token);
 
-            return verse;
+            start_token = verse.IndexOf('<', start_token);
+            end_token = verse.IndexOf('>', start_token);
+			end_token = end_token - start_token;
+			token = verse.Substring(start_token + 1, end_token);
+
+            //token = m_RhymeGenerator.GetRhyme("cunt", WordType.Any);
+
+
+
+            return token;
         }
     }
 }

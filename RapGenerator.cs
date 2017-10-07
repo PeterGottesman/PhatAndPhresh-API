@@ -33,39 +33,41 @@ namespace PhatAndPhresh
         {
             Random rand = new Random();
             string verse = m_templates.ElementAt(rand.Next(m_templates.Count));
-			string base_word = m_nouns.ElementAt(rand.Next(m_nouns.Count));
+            string base_word = m_nouns.ElementAt(rand.Next(m_nouns.Count));
 
-			int tag_count = verse.Count(x => x == '<');
-            int start_token = 0;
-            int end_token = 0;
+            //int tag_count = verse.Count(x => x == '<');
+            //int start_token = 0;
+            //int end_token = 0;
 
-            while (tag_count > 0)
-            {
-                start_token = verse.IndexOf('<', start_token);
-                end_token = verse.IndexOf('>', start_token);
-				end_token -= start_token;
-                string token_tag = verse.Substring(start_token + 1, end_token - 1);
-                WordType pos;
-                switch (token_tag)
-                {
-                    case "noun":
-                        pos = WordType.Noun;
-                        break;
-                    case "adjective":
-                        pos = WordType.Adjective;
-                        break;
-                    case "verb":
-                        pos = WordType.Verb;
-                        break;
-                    default:
-                        pos = WordType.Any;
-                        break;
-                }
+            //while (tag_count > 0)
+            //{
+            //    start_token = verse.IndexOf('<', start_token);
+            //    end_token = verse.IndexOf('>', start_token);
+            //    end_token -= start_token;
+            //    string token_tag = verse.Substring(start_token + 1, end_token - 1);
+            //    WordType pos;
+            //    switch (token_tag)
+            //    {
+            //        case "noun":
+            //            pos = WordType.Noun;
+            //            break;
+            //        case "adjective":
+            //            pos = WordType.Adjective;
+            //            break;
+            //        case "verb":
+            //            pos = WordType.Verb;
+            //            break;
+            //        default:
+            //            pos = WordType.Any;
+            //            break;
+            //    }
 
-                string rhyme = m_RhymeGenerator.GetRhyme(base_word, pos);
-                verse = verse.Remove(start_token, end_token + 1).Insert(start_token, rhyme);
-                tag_count--;
-			}
+            //    string rhyme = m_RhymeGenerator.GetRhyme(base_word, pos);
+            //    verse = verse.Remove(start_token, end_token + 1).Insert(start_token, rhyme);
+            //    tag_count--;
+            //}
+
+            List<string> verse_list = verse.Split(' ').ToList();
 
             return verse;
         }

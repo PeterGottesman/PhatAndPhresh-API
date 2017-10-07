@@ -33,7 +33,6 @@ namespace PhatAndPhresh
         {
             Random rand = new Random();
             string verse = m_templates.ElementAt(rand.Next(m_templates.Count));
-            string base_word = m_nouns.ElementAt(rand.Next(m_nouns.Count));
 
             //int tag_count = verse.Count(x => x == '<');
             //int start_token = 0;
@@ -68,8 +67,82 @@ namespace PhatAndPhresh
             //}
 
             List<string> verse_list = verse.Split(' ').ToList();
+            bool base_hit = false;
+            string base_word = "";
+
+			for (int i = 0; i < verse_list.Count(); ++i)
+            {
+                string word = verse_list[i];
+
+                if (!base_hit && word.ElementAt(0) == '<')
+                {
+                    string base_type = word.Substring(1, word.Count() - 2);
+					base_word = GetBaseWord(base_type);
+                    verse_list[i] = base_word;
+                    base_hit = true;
+                }
+                else if(base_hit && word.ElementAt(0) == '<')
+                {
+                    string base_type = word.Substring(1, word.Count() - 2);
+					WordType pos;
+                    switch (base_type)
+					{
+					        case "noun":
+					            pos = WordType.Noun;
+					            break;
+					        case "adjective":
+					            pos = WordType.Adjective;
+					            break;
+					        case "verb":
+					            pos = WordType.Verb;
+					            break;
+					        default:
+					            pos = WordType.Any;
+					            break;
+					}
+					string rhyme = m_RhymeGenerator.GetRhyme(base_word, pos);
+                    verse_list[i] = rhyme;
+                    base_word = rhyme;
+                }
+                
+            }
+
+            verse = verse_list.Aggregate((a, b) => a + ' ' + b);
+
+            // Make the entire thing lowercase
+            verse = verse.ToLower();
+
+            // Make the first letter uppercase
+            verse = char.ToUpper(verse[0]) + verse.Substring(1);
 
             return verse;
         }
+
+        /// <summary>
+        /// Gets the base word based on the base_type (Part of Speech) passed in.
+        /// </summary>
+        /// <returns>The base word.</returns>
+        /// <param name="base_type">Part of speech.</param>
+        private string GetBaseWord(string base_type)
+        {
+			Random rand = new Random();
+			string base_word;
+			switch (base_type)
+			    {
+			        case "noun":
+                        base_word = m_nouns.ElementAt(rand.Next(m_nouns.Count));
+			            break;
+			        case "adjective":
+                        base_word = m_adjectives.ElementAt(rand.Next(m_adjectives.Count));
+    			        break;
+			        case "verb":
+					    base_word = m_verbs.ElementAt(rand.Next(m_verbs.Count));
+					    break;
+			        default:
+                        base_word = "cunt";
+			            break;
+			    }
+            return base_word;
+		}
     }
 }

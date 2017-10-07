@@ -1,10 +1,15 @@
 ﻿Yo I will <verb> your <noun>
 You're just a <adjective> <noun>
-I can <adverb> <verb> all <noun>
+I can <verb> all <noun>
 You already know <noun>
 I'm a <adjective> <noun>, yeah
-On my <adverb> way to the <adjective> <noun>
+On my way to the <adjective> <noun>
+On my way to <adjective> <noun>
+Gonna <verb> up in here, yeah
+Gotta <verb> up this <noun>
 Up in the <noun>
 <verb> up in this <adjective> <noun>
-Yeah, <verb> good <adverb> <noun>
+Yeah, <verb> good <noun>
 Don't <verb> the <adjective> <noun>
+<adjective> <noun> is what I am
+And <noun> is who we are

@@ -32,22 +32,22 @@ namespace PhatAndPhresh
                 if (type == WordType.Noun)
                 {
                     var nouns = json.Where(r => ((r.tags != null) && r.tags.Contains("n"))).ToList();
-                    rhyme = nouns.ElementAt(rand.Next(nouns.Count()));
+                    if (nouns.Count() != 0) { rhyme = nouns.ElementAt(rand.Next(nouns.Count())); }
                 }
                 else if (type == WordType.Verb)
 				{
 					var verbs = json.Where(r => ((r.tags != null) && r.tags.Contains("v"))).ToList();
-                    rhyme = verbs.ElementAt(rand.Next(verbs.Count()));
+                    if (verbs.Count() != 0) { rhyme = verbs.ElementAt(rand.Next(verbs.Count())); }
 				}
                 else if (type == WordType.Adverb)
 				{
 					var adverbs = json.Where(r => ((r.tags != null) && r.tags.Contains("adv"))).ToList();
-                    rhyme = adverbs.ElementAt(rand.Next(adverbs.Count()));
+                    if (adverbs.Count() != 0) { rhyme = adverbs.ElementAt(rand.Next(adverbs.Count())); }
 				}
                 else if (type == WordType.Adjective)
 				{
 					var adjectives = json.Where(r => ((r.tags != null) && r.tags.Contains("adj"))).ToList();
-					rhyme = adjectives.ElementAt(rand.Next(adjectives.Count()));
+					if (adjectives.Count() != 0) { rhyme = adjectives.ElementAt(rand.Next(adjectives.Count())); }
 				}
 
                 // If we couldn't find a specific type of word, just grab any of them.

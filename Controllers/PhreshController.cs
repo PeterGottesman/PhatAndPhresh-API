@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using PhatAndPhresh.Models;
 
 namespace PhatAndPhresh.Controllers
 {
@@ -18,7 +19,7 @@ namespace PhatAndPhresh.Controllers
 
         // GET api/phresh
         [HttpGet]
-        public string Get()
+        public Rap Get()
         {
             return m_RapGenerator.Generate(2);
         }

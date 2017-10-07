@@ -21,7 +21,7 @@ namespace PhatAndPhresh.Controllers
         [HttpGet]
         public Rap Get()
         {
-            return m_RapGenerator.Generate(2);
+            return m_RapGenerator.Generate(4);
         }
     }
 }

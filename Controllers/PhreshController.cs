@@ -20,7 +20,7 @@ namespace PhatAndPhresh.Controllers
         [HttpGet]
         public string Get()
         {
-            return m_RapGenerator.Generate();
+            return m_RapGenerator.Generate(2);
         }
     }
 }

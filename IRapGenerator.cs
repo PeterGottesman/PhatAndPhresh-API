@@ -4,6 +4,6 @@ namespace PhatAndPhresh
 {
     public interface IRapGenerator
     {
-        string Generate();
+        string Generate(int verse_count);
     }
 }

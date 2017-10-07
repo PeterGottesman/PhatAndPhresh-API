@@ -9,6 +9,10 @@ namespace PhatAndPhresh
         private readonly IRhymeGenerator m_RhymeGenerator;
 
         private List<string> m_templates;
+		private List<string> m_nouns;
+		private List<string> m_adjectives;
+		private List<string> m_verbs;
+
 
 		public RapGenerator(IRhymeGenerator rhymeGenerator)
 		{
@@ -16,6 +20,13 @@ namespace PhatAndPhresh
 
 			string templates = System.IO.File.ReadAllText("./wwwroot/templates.txt");
 			m_templates = templates.Split('\n').ToList();
+			string nouns = System.IO.File.ReadAllText("./wwwroot/nouns.txt");
+			m_nouns = templates.Split('\n').ToList();
+			string adjectives = System.IO.File.ReadAllText("./wwwroot/adjectives.txt");
+			m_adjectives = templates.Split('\n').ToList();
+			string verbs = System.IO.File.ReadAllText("./wwwroot/verbs.txt");
+            m_verbs = templates.Split('\n').ToList();
+
 		}
 
         public string Generate()
@@ -33,7 +44,24 @@ namespace PhatAndPhresh
                 end_token = verse.IndexOf('>', start_token);
 				end_token -= start_token;
                 string token_tag = verse.Substring(start_token + 1, end_token - 1);
-				string rhyme = m_RhymeGenerator.GetRhyme("cunt", WordType.Any);
+                WordType pos;
+                switch (token_tag)
+                {
+                    case "noun":
+                        pos = WordType.Noun;
+                        break;
+                    case "adjective":
+                        pos = WordType.Adjective;
+                        break;
+                    case "verb":
+                        pos = WordType.Verb;
+                        break;
+                    default:
+                        pos = WordType.Any;
+                        break;
+                }
+
+				string rhyme = m_RhymeGenerator.GetRhyme("bitch", pos);
                 verse = verse.Remove(start_token, end_token + 1).Insert(start_token, rhyme);
                 tag_count--;
 			}

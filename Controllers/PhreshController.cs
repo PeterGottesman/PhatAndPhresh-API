@@ -21,7 +21,15 @@ namespace PhatAndPhresh.Controllers
         [HttpGet]
         public Rap Get()
         {
-            return m_RapGenerator.Generate(4);
+            string versesString = HttpContext.Request.Query["verses"];
+            int verses = 1;
+
+            if (!String.IsNullOrEmpty(versesString))
+            {
+                verses = int.Parse(versesString);
+            }
+
+            return m_RapGenerator.Generate(verses);
         }
     }
 }

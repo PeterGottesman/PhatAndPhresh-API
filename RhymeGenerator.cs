@@ -71,10 +71,10 @@ namespace PhatAndPhresh
 				string resultString = webResponse.Content.ReadAsStringAsync().Result;
 				List<WordResponse> json = JsonConvert.DeserializeObject<List<WordResponse>>(resultString);
 
-				// If there were no related words, just return the input.
+				// If there were no related words, just return a random word.
 				if (json.Count == 0)
 				{
-					return input;
+                    return GetRelatedWord("gangsta", type);
 				}
 
 				Random rand = new Random();

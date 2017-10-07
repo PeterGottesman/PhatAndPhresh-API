@@ -67,6 +67,12 @@ namespace PhatAndPhresh
                 tag_count--;
 			}
 
+            // Make the entire thing lowercase
+            verse = verse.ToLower();
+
+            // Make the first letter uppercase
+            verse = char.ToUpper(verse[0]) + verse.Substring(1);
+
             return verse;
         }
     }

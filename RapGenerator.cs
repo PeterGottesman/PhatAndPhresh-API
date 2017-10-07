@@ -20,28 +20,25 @@ namespace PhatAndPhresh
 
         public string Generate()
         {
-            string rhyme = m_RhymeGenerator.GetRhyme("Gun", WordType.Any);
-            string rap = $"Yo, my gun is {rhyme}, yo";
-
             Random rand = new Random();
-
             string verse = m_templates.ElementAt(rand.Next(m_templates.Count));
 
-            int start_token = verse.IndexOf('<');
-            int end_token = verse.IndexOf('>');
-            end_token = end_token - start_token;
-            string token = verse.Substring(start_token + 1, end_token - 1);
+			int tag_count = verse.Count(x => x == '<');
+            int start_token = 0;
+            int end_token = 0;
 
-            start_token = verse.IndexOf('<', start_token);
-            end_token = verse.IndexOf('>', start_token);
-			end_token = end_token - start_token;
-			token = verse.Substring(start_token + 1, end_token - 1);
+            while (tag_count > 0)
+            {
+                start_token = verse.IndexOf('<', start_token);
+                end_token = verse.IndexOf('>', start_token);
+				end_token -= start_token;
+                string token_tag = verse.Substring(start_token + 1, end_token - 1);
+				string rhyme = m_RhymeGenerator.GetRhyme("cunt", WordType.Any);
+                verse = verse.Remove(start_token, end_token + 1).Insert(start_token, rhyme);
+                tag_count--;
+			}
 
-            token = m_RhymeGenerator.GetRhyme("cunt", WordType.Any);
-
-
-
-            return token;
+            return verse;
         }
     }
 }

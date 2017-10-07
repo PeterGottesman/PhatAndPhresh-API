@@ -1,5 +1,4 @@
-﻿Benji
-Scrilla
+﻿Scrilla
 Dope
 Stack
 Brick
@@ -42,7 +41,6 @@ Gucci
 Bag
 Thot
 Blunt
-Joint
 Bong
 Stash
 Percocet
@@ -53,3 +51,10 @@ Case
 Atlanta
 Compton
 Bedstuy
+Ferrari
+Beamer
+Wraith
+Ghost
+Wagon
+Booze
+Marajuana

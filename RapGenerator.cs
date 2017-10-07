@@ -13,7 +13,7 @@ namespace PhatAndPhresh
 
         public string Generate()
         {
-            string rhyme = m_RhymeGenerator.GetRhyme("Spagett");
+            string rhyme = m_RhymeGenerator.GetRhyme("Spagett", WordType.Noun);
             string rap = $"Yo, Spagett my {rhyme}, yo";
 
             return rap;

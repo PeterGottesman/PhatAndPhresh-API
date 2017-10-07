@@ -12,6 +12,8 @@ namespace PhatAndPhresh.Controllers
     {
         private readonly IRapGenerator m_RapGenerator;
 
+        private const int MaxVerses = 10;
+
         public PhreshController(IRapGenerator rapGenerator)
 		{
 			m_RapGenerator = rapGenerator;
@@ -21,7 +23,26 @@ namespace PhatAndPhresh.Controllers
         [HttpGet]
         public Rap Get()
         {
-            return m_RapGenerator.Generate(4);
+            string versesString = HttpContext.Request.Query["verses"];
+            int verses = 1;
+
+            if (!String.IsNullOrEmpty(versesString))
+            {
+                verses = int.Parse(versesString);
+            }
+
+            if (verses > MaxVerses)
+            {
+                string errorString = $"ERROR: You cannot request more than {MaxVerses} verses.";
+
+                return new Rap
+                {
+                    Verses = new List<string>(new string[]{errorString}),
+                    Rhymes = new List<string>()
+                };
+            }
+
+            return m_RapGenerator.Generate(verses);
         }
     }
 }

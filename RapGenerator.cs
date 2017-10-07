@@ -80,7 +80,7 @@ namespace PhatAndPhresh
                             verseWords[j] += ',';
                         }
 
-                        //rhymeCount = rand.Next(MinRhymes, MaxRhymes);
+                        rhymeCount = rand.Next(MinRhymes, MaxRhymes);
 
                         baseHit = true;
 					}
@@ -121,11 +121,11 @@ namespace PhatAndPhresh
                         }
 					}
 
-                    //if (rhymeCount < 2)
-                    //{
-                    //    rhymeCount = rand.Next(MinRhymes, MaxRhymes);
-                    //    baseHit = false;
-                    //}
+                    if (rhymeCount < 2)
+                    {
+                        rhymeCount = rand.Next(MinRhymes, MaxRhymes);
+                        baseHit = false;
+                    }
 				}
 
                 // Join the words back into a verse

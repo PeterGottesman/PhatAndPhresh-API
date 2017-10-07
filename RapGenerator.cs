@@ -7,122 +7,138 @@ namespace PhatAndPhresh
 {
     public class RapGenerator : IRapGenerator
     {
-        private readonly IRhymeGenerator m_RhymeGenerator;
+        readonly IRhymeGenerator m_RhymeGenerator;
 
-        private List<string> m_templates;
-		private List<string> m_nouns;
-		private List<string> m_adjectives;
-		private List<string> m_verbs;
+        // Templates used to generated verses
+        public List<string> Templates { get; private set; }
 
+        // Word lists used for base words
+        public List<string> Nouns { get; private set; }
+        public List<string> Adjectives { get; private set; }
+        public List<string> Verbs { get; private set; }
+
+        const string TemplatesPath = "./wwwroot/templates.txt";
+        const string NounsPath = "./wwwroot/nouns.txt";
+        const string AdjectivesPath = "./wwwroot/adjectives.txt";
+        const string VerbsPath = "./wwwroot/verbs.txt";
+
+        // Verse generation parameters
+        const int MinRhymes = 2;
+        const int MaxRhymes = 5;
+        const string DefaultBaseWord = "Bitch";
 
 		public RapGenerator(IRhymeGenerator rhymeGenerator)
 		{
             m_RhymeGenerator = rhymeGenerator;
 
-			string templates = System.IO.File.ReadAllText("./wwwroot/templates.txt");
-			m_templates = templates.Split('\n').ToList();
-			string nouns = System.IO.File.ReadAllText("./wwwroot/nouns.txt");
-            m_nouns = nouns.Split('\n').ToList();
-			string adjectives = System.IO.File.ReadAllText("./wwwroot/adjectives.txt");
-            m_adjectives = adjectives.Split('\n').ToList();
-			string verbs = System.IO.File.ReadAllText("./wwwroot/verbs.txt");
-            m_verbs = verbs.Split('\n').ToList();
-
+            // Load required data from files
+            Templates = System.IO.File.ReadAllText(TemplatesPath).Split('\n').ToList();
+            Nouns = System.IO.File.ReadAllText(NounsPath).Split('\n').ToList();
+            Adjectives = System.IO.File.ReadAllText(AdjectivesPath).Split('\n').ToList();
+            Verbs = System.IO.File.ReadAllText(VerbsPath).Split('\n').ToList();
 		}
 
-        public Rap Generate(int verse_count)
+        public Rap Generate(int verseCount)
         {
             Random rand = new Random();
+			int rhymeCount = rand.Next(MinRhymes, MaxRhymes);
 
-            //Generates a list of random verses to the specified verse_count
-            //TODO add a check if the verse already exists
-            List<string> verses = new List<string>(verse_count);
-            for (int j = 0; j < verse_count; ++j)
+            // Generates a list of random verses to the specified verse_count
+            List<string> verses = new List<string>(verseCount);
+            for (int i = 0; i < verseCount; i++)
             {
-                verses.Add(m_templates.ElementAt(rand.Next(m_templates.Count)));
+                verses.Add(Templates.ElementAt(rand.Next(Templates.Count)));
 			}
 
-            // TODO
-            // This
             List<string> rhymes = new List<string>();
 
-            bool base_hit = false;
-            string base_word = "";
-            string base_type = "";
-			int number_of_rhymes = rand.Next(2, 4);
-
-			for (int k = 0; k < verse_count; ++k)
+            bool baseHit = false;
+            string baseWord = null;
+            string baseType = null;
+            for (int i = 0; i < verseCount; ++i)
             {
-                string verse = verses[k];
-                List<string> verse_list = verse.Split(' ').ToList();
+                string verse = verses.ElementAt(i);
+                List<string> verseWords = verse.Split(' ').ToList();
 
-				for (int i = 0; i < verse_list.Count(); ++i)
+                for (int j = 0; j < verseWords.Count(); ++j)
 				{
-					string word = verse_list[i];
+                    string word = verseWords.ElementAt(j);
 
-                    if (!base_hit && word.ElementAt(0) == '<')
+                    if (!baseHit && (word.ElementAt(0) == '<'))
 					{
-						int end_index = word.IndexOf('>');
-						base_type = word.Substring(1, end_index - 1);
-						base_word = GetBaseWord(base_type);
-                        rhymes.Add(base_word.ToLower());
-						verse_list[i] = base_word;
-						base_hit = true;
-						if (word.Contains(',')) { verse_list[i] += ','; }
-						number_of_rhymes = rand.Next(2, 5);
+                        int endIndex = word.IndexOf('>');
+
+						baseType = word.Substring(1, endIndex - 1);
+						baseWord = GetBaseWord(baseType);
+                        rhymes.Add(baseWord.ToLower());
+
+						verseWords[j] = baseWord;
+                            
+                        // Preserve comma
+						if (word.Contains(','))
+                        {
+                            verseWords[j] += ',';
+                        }
+
+                        //rhymeCount = rand.Next(MinRhymes, MaxRhymes);
+
+                        baseHit = true;
 					}
-					else if (base_hit && word.ElementAt(0) == '<')
+                    else if (baseHit && (word.ElementAt(0) == '<'))
 					{
-						int end_index = word.IndexOf('>');
-						base_type = word.Substring(1, end_index - 1);
-						WordType pos;
-						switch (base_type)
+                        int endIndex = word.IndexOf('>');
+						WordType wordType;
+
+						baseType = word.Substring(1, endIndex - 1);
+						switch (baseType)
 						{
 							case "noun":
-								pos = WordType.Noun;
+								wordType = WordType.Noun;
 								break;
 							case "adjective":
-								pos = WordType.Adjective;
+								wordType = WordType.Adjective;
 								break;
 							case "verb":
-								pos = WordType.Verb;
+								wordType = WordType.Verb;
 								break;
 							default:
-								pos = WordType.Any;
+								wordType = WordType.Any;
 								break;
 						}
-                        int percentage_to_relate = rand.Next(0, 100);
-                        string rhyme = "";
-						if(percentage_to_relate <= 25)
+
+						string rhyme = null;
+
+						rhyme = m_RhymeGenerator.GetRhyme(baseWord, wordType);
+						rhymes.Add(rhyme.ToLower());
+						rhymeCount--;
+
+						verseWords[j] = rhyme;
+
+						// Preserve comma
+						if (word.Contains(','))
                         {
-							rhyme = m_RhymeGenerator.GetRhyme(base_word, pos);
-						}
-                        else
-                        {
-                            rhyme = m_RhymeGenerator.GetRelatedWord(base_word, pos);
-						}
-						verse_list[i] = rhyme;
-                        rhymes.Add(rhyme.ToLower());
-						if (word.Contains(',')) { verse_list[i] += ','; }
-                        number_of_rhymes--;
+                            verseWords[j] += ',';
+                        }
 					}
-                    if (number_of_rhymes < 2)
-                    {
-                        number_of_rhymes = rand.Next(2, 5);
-                        base_hit = false;
-                    }
 
-
+                    //if (rhymeCount < 2)
+                    //{
+                    //    rhymeCount = rand.Next(MinRhymes, MaxRhymes);
+                    //    baseHit = false;
+                    //}
 				}
 
-                //Join the words back into a verse
-				verse = verse_list.Aggregate((a, b) => a + ' ' + b);
+                // Join the words back into a verse
+                verse = verseWords.Aggregate((a, b) => (a + ' ' + b));
+
 				// Make the entire thing lowercase
 				verse = verse.ToLower();
+
 				// Make the first letter uppercase
 				verse = char.ToUpper(verse[0]) + verse.Substring(1);
 
-                verses[k] = verse;
+                // Replace the original verse with the phire one
+                verses[i] = verse;
 			}
 
             Rap rap = new Rap
@@ -135,32 +151,32 @@ namespace PhatAndPhresh
         }
 
         /// <summary>
-        /// Gets the base word based on the base_type (Part of Speech) passed in.
+        /// Gets the base word based on the type (Part of Speech) passed in.
         /// </summary>
         /// <returns>The base word.</returns>
-        /// <param name="base_type">Part of speech.</param>
-        private string GetBaseWord(string base_type)
+        /// <param name="baseType">Part of speech.</param>
+        private string GetBaseWord(string baseType)
         {
-            
 			Random rand = new Random();
-			string base_word;
-			switch (base_type)
-			    {
-			        case "noun":
-                        base_word = m_nouns.ElementAt(rand.Next(m_nouns.Count));
-			            break;
-			        case "adjective":
-                        base_word = m_adjectives.ElementAt(rand.Next(m_adjectives.Count));
-    			        break;
-			        case "verb":
-					    base_word = m_verbs.ElementAt(rand.Next(m_verbs.Count));
-					    break;
-			        default:
-                        base_word = "bitch";
-			            break;
-			    }
 
-            return base_word;
+            string baseWord = null;
+			switch (baseType)
+		    {
+		        case "noun":
+                    baseWord = Nouns.ElementAt(rand.Next(Nouns.Count));
+		            break;
+		        case "adjective":
+                    baseWord = Adjectives.ElementAt(rand.Next(Adjectives.Count));
+			        break;
+		        case "verb":
+				    baseWord = Verbs.ElementAt(rand.Next(Verbs.Count));
+				    break;
+		        default:
+                    baseWord = DefaultBaseWord;
+		            break;
+		    }
+
+            return baseWord;
 		}
     }
 }

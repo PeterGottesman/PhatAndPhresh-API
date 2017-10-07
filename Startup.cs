@@ -24,6 +24,9 @@ namespace PhatAndPhresh
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
+
+            services.AddSingleton<IRapGenerator, RapGenerator>();
+            services.AddSingleton<IRhymeGenerator, RhymeGenerator>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

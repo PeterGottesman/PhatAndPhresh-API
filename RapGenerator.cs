@@ -48,7 +48,8 @@ namespace PhatAndPhresh
 
             bool base_hit = false;
             string base_word = "";
-			int number_of_rhymes = rand.Next(2, 5);
+            string base_type = "";
+			int number_of_rhymes = rand.Next(2, 4);
 
 			for (int k = 0; k < verse_count; ++k)
             {
@@ -59,20 +60,20 @@ namespace PhatAndPhresh
 				{
 					string word = verse_list[i];
 
-                    if (!base_hit && word.ElementAt(0) == '<' && number_of_rhymes == 0)
+                    if (!base_hit && word.ElementAt(0) == '<')
 					{
 						int end_index = word.IndexOf('>');
-						string base_type = word.Substring(1, end_index - 1);
+						base_type = word.Substring(1, end_index - 1);
 						base_word = GetBaseWord(base_type);
 						verse_list[i] = base_word;
 						base_hit = true;
 						if (word.Contains(',')) { verse_list[i] += ','; }
-						number_of_rhymes = rand.Next(2, 5);
+						number_of_rhymes = rand.Next(2, 4);
 					}
 					else if (base_hit && word.ElementAt(0) == '<')
 					{
 						int end_index = word.IndexOf('>');
-						string base_type = word.Substring(1, end_index - 1);
+						base_type = word.Substring(1, end_index - 1);
 						WordType pos;
 						switch (base_type)
 						{
@@ -91,10 +92,15 @@ namespace PhatAndPhresh
 						}
 						string rhyme = m_RhymeGenerator.GetRhyme(base_word, pos);
 						verse_list[i] = rhyme;
-						base_word = rhyme;
 						if (word.Contains(',')) { verse_list[i] += ','; }
                         number_of_rhymes--;
 					}
+                    if (number_of_rhymes < 2)
+                    {
+                        number_of_rhymes = rand.Next(2, 4);
+                        base_hit = false;
+                    }
+
 
 				}
 
@@ -104,6 +110,8 @@ namespace PhatAndPhresh
 				verse = verse.ToLower();
 				// Make the first letter uppercase
 				verse = char.ToUpper(verse[0]) + verse.Substring(1);
+
+                verses[k] = verse;
 			}
 
             Rap rap = new Rap

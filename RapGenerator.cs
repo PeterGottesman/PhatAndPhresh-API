@@ -65,10 +65,11 @@ namespace PhatAndPhresh
 						int end_index = word.IndexOf('>');
 						base_type = word.Substring(1, end_index - 1);
 						base_word = GetBaseWord(base_type);
+                        rhymes.Add(base_word.ToLower());
 						verse_list[i] = base_word;
 						base_hit = true;
 						if (word.Contains(',')) { verse_list[i] += ','; }
-						number_of_rhymes = rand.Next(2, 4);
+						number_of_rhymes = rand.Next(2, 5);
 					}
 					else if (base_hit && word.ElementAt(0) == '<')
 					{
@@ -90,14 +91,24 @@ namespace PhatAndPhresh
 								pos = WordType.Any;
 								break;
 						}
-						string rhyme = m_RhymeGenerator.GetRhyme(base_word, pos);
+                        int percentage_to_relate = rand.Next(0, 100);
+                        string rhyme = "";
+						if(percentage_to_relate <= 25)
+                        {
+							rhyme = m_RhymeGenerator.GetRhyme(base_word, pos);
+						}
+                        else
+                        {
+                            rhyme = m_RhymeGenerator.GetRelatedWord(base_word, pos);
+						}
 						verse_list[i] = rhyme;
+                        rhymes.Add(rhyme.ToLower());
 						if (word.Contains(',')) { verse_list[i] += ','; }
                         number_of_rhymes--;
 					}
                     if (number_of_rhymes < 2)
                     {
-                        number_of_rhymes = rand.Next(2, 4);
+                        number_of_rhymes = rand.Next(2, 5);
                         base_hit = false;
                     }
 

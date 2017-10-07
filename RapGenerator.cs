@@ -30,14 +30,14 @@ namespace PhatAndPhresh
             int start_token = verse.IndexOf('<');
             int end_token = verse.IndexOf('>');
             end_token = end_token - start_token;
-            string token = verse.Substring(start_token + 1, end_token);
+            string token = verse.Substring(start_token + 1, end_token - 1);
 
             start_token = verse.IndexOf('<', start_token);
             end_token = verse.IndexOf('>', start_token);
 			end_token = end_token - start_token;
-			token = verse.Substring(start_token + 1, end_token);
+			token = verse.Substring(start_token + 1, end_token - 1);
 
-            //token = m_RhymeGenerator.GetRhyme("cunt", WordType.Any);
+            token = m_RhymeGenerator.GetRhyme("cunt", WordType.Any);
 
 
 

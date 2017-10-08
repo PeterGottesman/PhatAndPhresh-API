@@ -7,7 +7,6 @@ Slap
 Flex
 Finesse
 Scoop
-Dunk
 Beat
 Shoot
 Cut

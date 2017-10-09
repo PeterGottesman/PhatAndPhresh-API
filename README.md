@@ -6,4 +6,6 @@ This is a **NSFW** rap generating API that was made in 36 hours for Kent Hack En
 
 The API is used by a [Website and iOS App](https://github.com/wafflez180/PhatAndPhresh-KentHacks-iOS-Web) which were made by [Arthur DeAraujo](http://arthurdearaujo.com/).
 
+[Here](https://www.youtube.com/watch?v=bVJZ7a4nuwg) is an example of the **phire** music videos that can be produced using this API.
+
 ![Phat & Phresh](http://www.rappers.org/wp-content/uploads/2009/06/k10172591.jpg)

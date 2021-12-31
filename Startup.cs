@@ -37,7 +37,16 @@ namespace PhatAndPhresh
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseMvc();
+			app.UseHttpsRedirection();
+
+			app.UseRouting();
+
+			app.UseAuthorization();
+
+			app.UseEndpoints(endpoints =>
+							 {
+								 endpoints.MapControllers();
+							 });
         }
     }
 }
